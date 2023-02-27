@@ -11,9 +11,10 @@ public class TPMain {
     public TPMain() {
         frame = new JFrame("Television Packages");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-
+        frame.setSize(730, 600);
+        frame.setLocationRelativeTo(null);
         frame.add(new TPDisplay());
+        frame.setResizable(false);
 
         menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
@@ -47,6 +48,7 @@ public class TPMain {
                     }
                     case "Căutare" -> {
                         frame.getContentPane().removeAll();
+                        frame.add(new TPSearch());
                     }
                 }
                 frame.revalidate();

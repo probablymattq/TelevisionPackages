@@ -5,9 +5,7 @@ import java.sql.*;
 
 public class TPDisplay extends JPanel {
     public TPDisplay() {
-        super();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
         try (Connection conn = TPConnection.connect()) {
             String query = "SELECT * FROM TVChannels";
             PreparedStatement statement = conn.prepareStatement(query);
