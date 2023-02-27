@@ -7,6 +7,8 @@ public class TPInsert extends JPanel {
     private JTextField idField;
     private JTextField nameField;
     private JTextField descriptionField;
+    private JTextField languageField;
+    private JTextField qualityField;
     private JTextField typeField;
     private JTextField priceField;
     private JTextField launchDateField;
@@ -41,32 +43,48 @@ public class TPInsert extends JPanel {
         descriptionField.setBounds(150, 150, 200, 25);
         add(descriptionField);
 
+        JLabel languageLabel = new JLabel("Limbă:");
+        languageLabel.setBounds(50, 200, 100, 25);
+        add(languageLabel);
+
+        languageField = new JTextField();
+        languageField.setBounds(150, 200, 200, 25);
+        add(languageField);
+
         JLabel typeLabel = new JLabel("Tip:");
-        typeLabel.setBounds(50, 200, 100, 25);
+        typeLabel.setBounds(50, 300, 100, 25);
         add(typeLabel);
 
         typeField = new JTextField();
-        typeField.setBounds(150, 200, 200, 25);
+        typeField.setBounds(150, 300, 200, 25);
         add(typeField);
 
+        JLabel qualityLabel = new JLabel("Calitate:");
+        qualityLabel.setBounds(50, 250, 100, 25);
+        add(qualityLabel);
+
+        qualityField = new JTextField();
+        qualityField.setBounds(150, 250, 200, 25);
+        add(qualityField);
+
         JLabel priceLabel = new JLabel("Preț:");
-        priceLabel.setBounds(50, 250, 100, 25);
+        priceLabel.setBounds(50, 350, 100, 25);
         add(priceLabel);
 
         priceField = new JTextField();
-        priceField.setBounds(150, 250, 200, 25);
+        priceField.setBounds(150, 350, 200, 25);
         add(priceField);
 
         JLabel launchDateLabel = new JLabel("Data lansării:");
-        launchDateLabel.setBounds(50, 300, 100, 25);
+        launchDateLabel.setBounds(50, 400, 100, 25);
         add(launchDateLabel);
 
         launchDateField = new JTextField();
-        launchDateField.setBounds(150, 300, 200, 25);
+        launchDateField.setBounds(150, 400, 200, 25);
         add(launchDateField);
 
         insertButton = new JButton("Inserare");
-        insertButton.setBounds(150, 350, 200, 25);
+        insertButton.setBounds(150, 450, 200, 25);
         add(insertButton);
 
         insertButton.addActionListener(e -> {
@@ -74,14 +92,16 @@ public class TPInsert extends JPanel {
                 JOptionPane.showMessageDialog(null, "Toate câmpurile sunt obligatorii");
             } else {
                 try (Connection conn = TPConnection.connect()) {
-                    String query = "INSERT INTO TVChannels (id, name, description, type, price, launch_date) VALUES (?, ?, ?, ?, ?, ?)";
+                    String query = "INSERT INTO TVChannels (id, name, description, language, type, quality, price, launch_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement statement = conn.prepareStatement(query);
                     statement.setString(1, idField.getText());
                     statement.setString(2, nameField.getText());
                     statement.setString(3, descriptionField.getText());
-                    statement.setString(4, typeField.getText());
-                    statement.setDouble(5, Double.parseDouble(priceField.getText()));
-                    statement.setDate(6, Date.valueOf(launchDateField.getText()));
+                    statement.setString(4, languageField.getText());
+                    statement.setString(5, typeField.getText());
+                    statement.setString(6, qualityField.getText());
+                    statement.setDouble(7, Double.parseDouble(priceField.getText()));
+                    statement.setDate(8, Date.valueOf(launchDateField.getText()));
                     statement.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Datele au fost adaugate in baza de date");
                     frame.getContentPane().removeAll();
