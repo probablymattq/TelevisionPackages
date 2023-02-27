@@ -9,10 +9,7 @@ public class TPConnection {
             String user = "matter";
             String password = "0652";
 
-            Connection conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Connected to database");
-
-            return conn;
+            return DriverManager.getConnection(url, user, password);
         } catch (Exception ex) {
             System.out.println("Error connecting to database: " + ex.getMessage());
         }

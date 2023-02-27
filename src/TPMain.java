@@ -1,12 +1,9 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
 
 public class TPMain {
-    JFrame frame;
+    static JFrame frame;
     JMenuBar menuBar;
     JMenu menu;
     JMenuItem mainItem, insertItem, removeItem, searchItem;
@@ -43,6 +40,7 @@ public class TPMain {
                     }
                     case "Inserare" -> {
                         frame.getContentPane().removeAll();
+                        frame.add(new TPInsert());
                     }
                     case "Ștergere" -> {
                         frame.getContentPane().removeAll();
