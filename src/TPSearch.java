@@ -9,7 +9,7 @@ public class TPSearch extends JPanel {
 
     public TPSearch() {
 
-        String[] elements = {"id", "name", "description", "language", "type", "quality", "price", "launch_date"};
+        String[] elements = {"name", "description", "language", "type", "quality", "price", "launch_date"};
         JComboBox<String> comboBox = new JComboBox<>(elements);
         comboBox.setBounds(70, 10, 190, 25);
         add(comboBox);
@@ -36,6 +36,8 @@ public class TPSearch extends JPanel {
 
                     if(Objects.equals(comboBox.getSelectedItem(), "launch_date")) {
                         query = "SELECT * FROM TVChannels WHERE " + comboBox.getSelectedItem() + " >= '" + search + "'";
+                    } else if(Objects.equals(comboBox.getSelectedItem(), "language")) {
+                        query = "SELECT * FROM TVChannels WHERE " + comboBox.getSelectedItem() + " LIKE '%" + search + "%'";
                     } else {
                         query = "SELECT * FROM TVChannels WHERE " + comboBox.getSelectedItem() + " LIKE '" + search + "%'";
                     }
@@ -44,9 +46,8 @@ public class TPSearch extends JPanel {
                     PreparedStatement statement = conn.prepareStatement(query);
                     ResultSet result = statement.executeQuery();
                     DefaultTableModel tableModel = new DefaultTableModel(
-                            new Object[]{"ID", "Nume", "Descriere", "Language", "Tip", "Calitate", "Preț", "Data lansării"}, 0);
+                            new Object[]{"Nume", "Descriere", "Language", "Tip", "Calitate", "Preț", "Data lansării"}, 0);
                     while (result.next()) {
-                        int id = result.getInt("id");
                         String channelName = result.getString("name");
                         String description = result.getString("description");
                         String language = result.getString("language");
@@ -54,7 +55,7 @@ public class TPSearch extends JPanel {
                         String quality = result.getString("quality");
                         double price = result.getDouble("price");
                         Date launchDate = result.getDate("launch_date");
-                        tableModel.addRow(new Object[]{id, channelName, description, language, type, quality, price, launchDate});
+                        tableModel.addRow(new Object[]{channelName, description, language, type, quality, price, launchDate});
                     }
                     JTable table = new JTable(tableModel);
                     scrollPane = new JScrollPane(table);

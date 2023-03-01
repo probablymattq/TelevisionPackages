@@ -1,12 +1,12 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class TPMain {
     static JFrame frame;
     JMenuBar menuBar;
-    JMenu menu;
-    JMenuItem mainItem, insertItem, removeItem, searchItem;
+    JButton main, insert, remove, search;
 
     public TPMain() {
         frame = new JFrame("Television Packages");
@@ -18,18 +18,20 @@ public class TPMain {
 
         menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
-        menu = new JMenu("Meniu");
-        menuBar.add(menu);
+        main = new JButton("Principal");
+        insert = new JButton("Inserare");
+        remove = new JButton("Ștergere");
+        search = new JButton("Căutare");
 
-        mainItem = new JMenuItem("Principal");
-        insertItem = new JMenuItem("Inserare");
-        removeItem = new JMenuItem("Ștergere");
-        searchItem = new JMenuItem("Căutare");
+        configureButton(main);
+        configureButton(insert);
+        configureButton(remove);
+        configureButton(search);
 
-        menu.add(mainItem);
-        menu.add(insertItem);
-        menu.add(removeItem);
-        menu.add(searchItem);
+        menuBar.add(main);
+        menuBar.add(insert);
+        menuBar.add(remove);
+        menuBar.add(search);
 
         ActionListener listener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -45,6 +47,7 @@ public class TPMain {
                     }
                     case "Ștergere" -> {
                         frame.getContentPane().removeAll();
+                        frame.add(new TPRemove());
                     }
                     case "Căutare" -> {
                         frame.getContentPane().removeAll();
@@ -56,16 +59,26 @@ public class TPMain {
             }
         };
 
-        mainItem.addActionListener(listener);
-        insertItem.addActionListener(listener);
-        removeItem.addActionListener(listener);
-        searchItem.addActionListener(listener);
+        main.addActionListener(listener);
+        insert.addActionListener(listener);
+        remove.addActionListener(listener);
+        search.addActionListener(listener);
 
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
         new TPMain();
+    }
+
+    private void configureButton(Object o){
+        JButton button = (JButton) o;
+        button.setOpaque(false);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setForeground(Color.BLACK);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 }
 
