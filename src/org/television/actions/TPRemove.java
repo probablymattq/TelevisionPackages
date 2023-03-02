@@ -1,8 +1,11 @@
+package org.television.actions;
+
+import org.television.connection.TPConnection;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
-import java.util.Objects;
 
 public class TPRemove extends JPanel {
     JScrollPane scrollPane;

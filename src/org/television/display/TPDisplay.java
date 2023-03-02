@@ -1,3 +1,7 @@
+package org.television.display;
+
+import org.television.connection.TPConnection;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;

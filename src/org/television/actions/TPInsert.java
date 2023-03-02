@@ -1,6 +1,10 @@
+package org.television.actions;
+
+import org.television.connection.TPConnection;
+import org.television.display.TPDisplay;
+import org.television.TPMain;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.sql.*;
 
 public class TPInsert extends JPanel {
