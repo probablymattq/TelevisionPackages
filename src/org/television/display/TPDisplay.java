@@ -1,5 +1,6 @@
 package org.television.display;
 
+import org.television.TPMain;
 import org.television.connection.TPConnection;
 
 import javax.swing.*;
@@ -9,12 +10,15 @@ import java.sql.*;
 
 public class TPDisplay extends JPanel {
     public TPDisplay() {
+        TPMain.setTitle("Television");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         try (Connection conn = TPConnection.connect()) {
             String query = "SELECT * FROM TVChannels";
             PreparedStatement statement = conn.prepareStatement(query);
             ResultSet result = statement.executeQuery();
-            DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Nume", "Descriere", "Language", "Tip", "Calitate", "Preț", "Data lansării"}, 0);
+            DefaultTableModel tableModel =
+                    new DefaultTableModel(
+                            new Object[]{"Nume", "Descriere", "Language", "Tip", "Calitate", "Preț", "Data lansării"}, 0);
             while (result.next()) {
                 String channelName = result.getString("name");
                 String description = result.getString("description");

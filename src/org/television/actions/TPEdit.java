@@ -4,53 +4,44 @@ import org.television.TPMain;
 import org.television.connection.TPConnection;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.sql.*;
 
-public class TPRemove extends JPanel {
+public class TPEdit extends JPanel {
     JScrollPane scrollPane;
+    DefaultTableModel tableModel =
+            new DefaultTableModel(
+                    new Object[]{"Nume", "Descriere", "Language", "Tip", "Calitate", "Preț", "Data lansării"}, 0);
 
-    public TPRemove() {
-        TPMain.setTitle("Television (Ștergere)");
-        JPanel nestedPanel = new JPanel(null);
-        nestedPanel.setPreferredSize(new Dimension(getWidth(), 20));
-        add(nestedPanel, BorderLayout.NORTH);
+    public TPEdit() {
+        TPMain.setTitle("Television (Editare)");
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        if (scrollPane != null) remove(scrollPane);
+        updateTable();
 
-        String[] elements = {"name", "description", "language", "type", "quality", "price", "launch_date"};
-        JComboBox<String> comboBox = new JComboBox<>(elements);
-        comboBox.setBounds(70, 10, 190, 25);
-        nestedPanel.add(comboBox);
+        tableModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                TableModel model = (TableModel) e.getSource();
+                String columnName = model.getColumnName(column);
+                String firstRaw = (String) model.getValueAt(row, 0);
+                Object data = model.getValueAt(row, column);
 
-        JTextField searchField = new JTextField();
-        searchField.setBounds(270, 10, 200, 25);
-        nestedPanel.add(searchField);
-
-        JButton removeButton = new JButton("Șterge");
-        removeButton.setBounds(480, 10, 100, 25);
-        nestedPanel.add(removeButton);
-
-        removeButton.addActionListener(e -> {
-            if (scrollPane != null) remove(scrollPane);
-
-            String search = searchField.getText();
-            if (search == null || search.equals("")) {
-                JOptionPane.showMessageDialog(null, "Introduceți un parametru de căutare");
-            } else {
                 try (Connection conn = TPConnection.connect()) {
-                    String query = "DELETE FROM TVChannels WHERE " + comboBox.getSelectedItem() + " = '" + search + "'";
-                    JOptionPane.showMessageDialog(null, "Ștergerea a fost efectuată cu succes");
+                    String query = "UPDATE TVChannels SET " + getDatabaseColumn(columnName) + " = '" + data + "' WHERE name = '" + firstRaw + "'";
                     PreparedStatement statement = conn.prepareStatement(query);
                     statement.executeUpdate();
-                    updateTable();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
             }
         });
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        updateTable();
     }
 
     private void updateTable() {
@@ -58,9 +49,6 @@ public class TPRemove extends JPanel {
             String query = "SELECT * FROM TVChannels";
             PreparedStatement statement = conn.prepareStatement(query);
             ResultSet result = statement.executeQuery();
-            DefaultTableModel tableModel =
-                    new DefaultTableModel(
-                            new Object[]{"Nume", "Descriere", "Language", "Tip", "Calitate", "Preț", "Data lansării"}, 0);
             while (result.next()) {
                 String channelName = result.getString("name");
                 String description = result.getString("description");
@@ -79,5 +67,18 @@ public class TPRemove extends JPanel {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private String getDatabaseColumn(String name) {
+        return switch (name) {
+            case "Nume" -> "name";
+            case "Descriere" -> "description";
+            case "Language" -> "language";
+            case "Tip" -> "type";
+            case "Calitate" -> "quality";
+            case "Preț" -> "price";
+            case "Data lansării" -> "launch_date";
+            default -> null;
+        };
     }
 }

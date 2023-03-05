@@ -20,8 +20,8 @@ public class TPInsert extends JPanel {
     JFrame frame = TPMain.frame;
 
     public TPInsert() {
+        TPMain.setTitle("Television (Adăugare)");
         setLayout(null);
-
         JLabel nameLabel = new JLabel("Nume:");
         nameLabel.setBounds(180, 50, 100, 25);
         add(nameLabel);

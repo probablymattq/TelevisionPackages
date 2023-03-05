@@ -6,6 +6,7 @@ public class TPConnection {
     private static final String USER = "matter";
     private static final String PASSWORD = "0652";
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=Television;trustServerCertificate=true";
+
     public static Connection connect() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

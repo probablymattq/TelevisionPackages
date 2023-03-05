@@ -1,5 +1,6 @@
 package org.television;
 
+import org.television.actions.TPEdit;
 import org.television.actions.TPInsert;
 import org.television.actions.TPRemove;
 import org.television.actions.TPSearch;
@@ -13,10 +14,10 @@ import java.awt.event.ActionListener;
 public class TPMain {
     public static JFrame frame;
     JMenuBar menuBar;
-    JButton main, insert, remove, search;
+    JButton main, insert, remove, search, edit;
 
     public TPMain() {
-        frame = new JFrame("Television Packages");
+        frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(730, 600);
         frame.setLocationRelativeTo(null);
@@ -29,16 +30,19 @@ public class TPMain {
         insert = new JButton("Inserare");
         remove = new JButton("Ștergere");
         search = new JButton("Căutare");
+        edit = new JButton("Editare");
 
         configureButton(main);
         configureButton(insert);
         configureButton(remove);
         configureButton(search);
+        configureButton(edit);
 
         menuBar.add(main);
         menuBar.add(insert);
         menuBar.add(remove);
         menuBar.add(search);
+        menuBar.add(edit);
 
         ActionListener listener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -60,6 +64,10 @@ public class TPMain {
                         frame.getContentPane().removeAll();
                         frame.add(new TPSearch());
                     }
+                    case "Editare" -> {
+                        frame.getContentPane().removeAll();
+                        frame.add(new TPEdit());
+                    }
                 }
                 frame.revalidate();
                 frame.repaint();
@@ -70,6 +78,7 @@ public class TPMain {
         insert.addActionListener(listener);
         remove.addActionListener(listener);
         search.addActionListener(listener);
+        edit.addActionListener(listener);
 
         frame.setVisible(true);
     }
@@ -78,7 +87,11 @@ public class TPMain {
         new TPMain();
     }
 
-    private void configureButton(Object o){
+    public static void setTitle(String title) {
+        frame.setTitle(title);
+    }
+
+    private void configureButton(Object o) {
         JButton button = (JButton) o;
         button.setOpaque(false);
         button.setBorderPainted(false);
