@@ -83,7 +83,7 @@ public class TPInsert extends JPanel {
         add(insertButton);
 
         insertButton.addActionListener(e -> {
-            if(nameField.getText().isEmpty() || descriptionField.getText().isEmpty() || languageField.getText().isEmpty() || typeField.getText().isEmpty() || qualityField.getText().isEmpty() || priceField.getText().isEmpty() || launchDateField.getText().isEmpty()) {
+            if (nameField.getText().isEmpty() || descriptionField.getText().isEmpty() || languageField.getText().isEmpty() || typeField.getText().isEmpty() || qualityField.getText().isEmpty() || priceField.getText().isEmpty() || launchDateField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Toate câmpurile sunt obligatorii");
             } else {
                 try (Connection conn = TPConnection.connect()) {
@@ -110,8 +110,8 @@ public class TPInsert extends JPanel {
                     frame.add(new TPDisplay());
                     frame.revalidate();
                     frame.repaint();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+                } catch (SQLException | NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Eroare: " + ex.getMessage());
                 }
             }
         });

@@ -1,5 +1,6 @@
 package org.television.actions;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.television.TPMain;
 import org.television.connection.TPConnection;
 
@@ -23,9 +24,11 @@ public class TPEdit extends JPanel {
         if (scrollPane != null) remove(scrollPane);
         updateTable();
 
+
         tableModel.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
+                if (e.getType() == TableModelEvent.UPDATE) {
                 int row = e.getFirstRow();
                 int column = e.getColumn();
                 TableModel model = (TableModel) e.getSource();
@@ -33,12 +36,21 @@ public class TPEdit extends JPanel {
                 String firstRaw = (String) model.getValueAt(row, 0);
                 Object data = model.getValueAt(row, column);
 
+                if(validation(data) == null) {
+                    JOptionPane.showMessageDialog(null, "Nu ați introdus nimic!");
+                    System.out.println(data);
+                    return;
+                }
+
                 try (Connection conn = TPConnection.connect()) {
                     String query = "UPDATE TVChannels SET " + getDatabaseColumn(columnName) + " = '" + data + "' WHERE name = '" + firstRaw + "'";
                     PreparedStatement statement = conn.prepareStatement(query);
                     statement.executeUpdate();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+                } catch (SQLServerException ex) {
+                    JOptionPane.showMessageDialog(null, "Eroare: " + ex.getMessage());
+                } catch (NumberFormatException | SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Eroare: " + ex.getMessage());
+                }
                 }
             }
         });
@@ -64,8 +76,18 @@ public class TPEdit extends JPanel {
             add(scrollPane, BorderLayout.CENTER);
             revalidate();
             repaint();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLServerException ex) {
+            JOptionPane.showMessageDialog(null, "Eroare: " + ex.getMessage());
+        } catch (NumberFormatException | SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Eroare: " + ex.getMessage());
+        }
+    }
+
+    private Object validation(Object data) {
+        if (data == null || data.equals("")) {
+            return null;
+        } else {
+            return data;
         }
     }
 
